@@ -1,4 +1,6 @@
+//Sophia Babayev / 12/15/25 / Defines a Node
 public class Node{
+
     int key;
     Node left, right;
 
