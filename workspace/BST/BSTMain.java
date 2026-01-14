@@ -3,22 +3,33 @@ public class BSTMain {
     public static void main(String[] args) {
         BST tree = new BST();
         tree.insert(10);
+        tree.printTree();
         tree.insert(15);
+        tree.printTree();
         tree.insert(5);
+        tree.printTree();
         tree.insert(8);
+        tree.printTree();
         tree.insert(20);
+        tree.printTree();
         tree.insert(6);
+        tree.printTree();
         tree.insert(13);
-
-
         tree.printTree();
-        tree.rotateRight(tree.root.left.right, tree.root.left);
-
+        tree.insert(18);
+        tree.printTree();
+        tree.insert(200);
+        tree.printTree();
+        tree.insert(16);
+        tree.printTree();
+        tree.insert(1);
+        tree.printTree();
+        tree.remove(18);
+        tree.printTree();
+        tree.remove(8);
         tree.printTree();
 
-            tree.rotateLeft(tree.root.left, tree.root);
-
-        tree.printTree();
+        
         System.out.println(tree.toString());
 
     }

@@ -1,4 +1,4 @@
-//Sophia Babayev / 12/10/2025 / Creates a tree that works.
+//Sophia Babayev / 12/10/2025 / Creates an AVL tree that works.
 import java.util.ArrayList;
 
 public class BST {
@@ -13,6 +13,10 @@ public class BST {
     // Pre: key is an integer value to insert.
     // Post: If key was not already present, a new node with key is inserted preserving BST ordering. If key is duplicate, tree is unchanged.
     public void insert(int key) {
+
+        //Array list
+        ArrayList<Node> path = new ArrayList<Node>();
+
         // If tree is empty I create root
         if (root == null) {
             root = new Node(key);
@@ -22,25 +26,47 @@ public class BST {
         // Traverse tree to find insertion point
         Node curr = root;
         while (true) {
+            path.add(curr);
             if (key < curr.key) {
                 // Go left
                 if (curr.left == null) {
                     curr.left = new Node(key);
-                    return;
+                    break;
                 }
                 curr = curr.left;
             } else if (key > curr.key) {
                 // Go right
                 if (curr.right == null) {
                     curr.right = new Node(key);
-                    return;
+                    break;
                 }
                 curr = curr.right;
-            } else {
-                // Duplicate so I don't insert
-                return;
+            } 
+        }
+
+        for (int i = path.size()-1; i >= 0; i--){
+            Node place = path.get(i);
+            Node prev = null;
+            if(i>0){
+                prev = path.get(i - 1);
+            }
+
+            if (this.balance(place) > 1){
+                if(this.balance(place.left) < 0){
+                    this.rotateLeft(place.left, place);
+                }
+                this.rotateRight(place, prev);
+                
+            }else if (this.balance(place) < -1){
+                if (this.balance(place.right) > 0){
+                    this.rotateRight(place.right, place);
+                }
+                this.rotateLeft(place, prev);
+                
             }
         }
+
+        
     }
 
     // Pre: key is the value to search for.
@@ -60,17 +86,22 @@ public class BST {
     }
 
     // Pre: key is the value to remove from the tree.
-    // Post: If key exists in the tree it is removed and the method returns true. If key does not exist the tree is unchanged and the method returns false.
+    // Post: If key exists in the tree it is removed and the method returns true. If
+    // key does not exist the tree is unchanged and the method returns false.
     public boolean remove(int key) {
-        
+
         Node curr = root;
         Node parent = null;
 
-        if(search(key) == false ){
+        // Array list
+        ArrayList<Node> path = new ArrayList<Node>();
+
+        if (search(key) == false) {
             return false;
         }
 
         while (curr != null && curr.key != key) {
+            path.add(curr);
             parent = curr;
             if (key < curr.key) {
                 curr = curr.left;
@@ -79,17 +110,19 @@ public class BST {
             }
         }
 
+        System.out.println(
+                "Removing: " + curr.key + " height of node: " + height(curr) + " balance of node: " + balance(curr));
+
         // no children
         if (curr.left == null && curr.right == null) {
-            if (parent.right == curr){
+            if (parent.right == curr) {
                 parent.right = null;
-            }else {
+            } else {
                 parent.left = null;
             }
-            
+
             return true;
         }
-
 
         // one child
         else if (curr.left == null || curr.right == null) {
@@ -99,15 +132,16 @@ public class BST {
             } else {
                 parent.right = child;
             }
-             return true;
+            return true;
         }
 
-        //two children
-        //another two nodes - find the parent of the node that's all the way left of the right child
-        //replace yourself with that node's left child
-        //remove that node (parent.left =  parent.left.right)
+        // two children
+        // another two nodes - find the parent of the node that's all the way left of
+        // the right child
+        // replace yourself with that node's left child
+        // remove that node (parent.left = parent.left.right)
         else {
-            // Find successor 
+            // Find successor
             Node successorParent = curr;
             Node successor = curr.right;
             while (successor.left != null) {
@@ -115,21 +149,42 @@ public class BST {
                 successor = successor.left;
             }
 
-
             // Replace current node's key with successor's key
             curr.key = successor.key;
 
-
-            // Remove successor node 
-            //if we never moved off of curr and curr == successorParent
-            if(curr == successorParent){
+            // Remove successor node
+            // if we never moved off of curr and curr == successorParent
+            if (curr == successorParent) {
                 successorParent.right = successor.right;
-            }
-            else{
-                //if we needed to move further down the tree to find successor
+            } else {
+                // if we needed to move further down the tree to find successor
                 successorParent.left = successor.right;
             }
+
+            for (int i = path.size() - 1; i >= 0; i--) {
+                Node place = path.get(i);
+                Node prev = null;
+                if (i > 0) {
+                    prev = path.get(i - 1);
+                }
+
+                if (this.balance(place) > 1) {
+                    if (this.balance(place.left) < 0) {
+                        this.rotateLeft(place.left, place);
+                    }
+                    this.rotateRight(place, prev);
+
+                } else if (this.balance(place) < -1) {
+                    if (this.balance(place.right) > 0) {
+                        this.rotateRight(place.right, place);
+                    }
+                    this.rotateLeft(place, prev);
+
+                }
+            }
+
             return true;
+
         }
 
     }
@@ -183,7 +238,7 @@ public class BST {
 
 
     // rotates the tree such that the subRoot is replaced with it's right child with subRoot becoming the left child of the new subRoot. prev now points to the new subRoot.
-    // Pre: subRoot is a node in the tree and prev is its parent (or null if subRoot is root). subRoot.right must be non-null to perform a meaningful left rotation.
+    // Pre: subRoot is a node in the tree and prev is its parent (or null if subRoot is root). subRoot.right must be non-null to perform a left rotation.
     // Post: Performs a left rotation at subRoot. Tree links are updated so that subRoot becomes the left child of its former right child.
     private void rotateLeft(Node subRoot, Node prev){
         if (subRoot == null || subRoot.right == null) {
@@ -208,7 +263,7 @@ public class BST {
  
 
     // rotates the tree such that the subRoot is replaced with it's left child with subRoot becoming the right child of the new subRoot. prev now points to the new subRoot.
-    // Pre: subRoot is a node in the tree and prev is its parent (or null if subRoot is root).subRoot.left must be non-null to perform a meaningful right rotation.
+    // Pre: subRoot is a node in the tree and prev is its parent (or null if subRoot is root).subRoot.left must be non-null to perform a right rotation.
     // Post: Performs a right rotation at subRoot. Tree links are updated so that subRoot becomes the right child of its former left child.
     private void rotateRight(Node subRoot, Node prev){
         if (subRoot == null || subRoot.left == null) {
@@ -254,6 +309,13 @@ public class BST {
         int leftHeight = height(node.left);
         int rightHeight = height(node.right);
         return leftHeight - rightHeight;
+    }
+
+
+
+    private void fix (ArrayList<Node> path) {
+        //iterate backwords through path and check balnce for each Node in the path
+        
     }
 
 
