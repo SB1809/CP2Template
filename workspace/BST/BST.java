@@ -90,6 +90,7 @@ public class BST {
     // key does not exist the tree is unchanged and the method returns false.
     public boolean remove(int key) {
 
+        boolean ret = false;
         Node curr = root;
         Node parent = null;
 
@@ -121,7 +122,7 @@ public class BST {
                 parent.left = null;
             }
 
-            return true;
+            ret = true;
         }
 
         // one child
@@ -132,7 +133,7 @@ public class BST {
             } else {
                 parent.right = child;
             }
-            return true;
+            ret = true;
         }
 
         // two children
@@ -161,7 +162,12 @@ public class BST {
                 successorParent.left = successor.right;
             }
 
-            for (int i = path.size() - 1; i >= 0; i--) {
+   
+            ret = true;
+
+        }
+
+                 for (int i = path.size() - 1; i >= 0; i--) {
                 Node place = path.get(i);
                 Node prev = null;
                 if (i > 0) {
@@ -182,10 +188,8 @@ public class BST {
 
                 }
             }
+            return ret;
 
-            return true;
-
-        }
 
     }
 

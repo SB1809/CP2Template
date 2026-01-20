@@ -28,7 +28,8 @@ public class BSTMain {
         tree.printTree();
         tree.remove(8);
         tree.printTree();
-
+        tree.remove(10);
+        tree.printTree();
         
         System.out.println(tree.toString());
 
