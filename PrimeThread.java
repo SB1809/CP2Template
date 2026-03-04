@@ -83,10 +83,19 @@ public class PrimeThread{
        //comment the following line out once you've seen how this works.
        //new PrimeThread().test();
        CountPrimesThread[] threadArray = new CountPrimesThread[threads];
+        int low = 0;
+        int high = 0;
+
        for (int i = 0; i < threadArray.length; i++) {
-        //come up with some other way to distribute the numbers faster
-            threadArray[i] = new CountPrimesThread(i * (max / threads), (i + 1) * (max / threads) - 1);
-            threadArray[i].start();
+   
+            high = (max+low)/2;
+           
+        if(i == threads - 1) {
+            high = max - 1;
+        }
+        threadArray[i] = new CountPrimesThread(low, high);
+        threadArray[i].start();
+         low = high+1;
        }
        for (int i = 0; i < threads; i++) {
             try {
