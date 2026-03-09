@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.Instant;
 public class PrimeThread{
     
+
+    
     
     private static int total=0;
     //this provided thread calls functions you will need to run in order to calculate the number of threads between the provided min and max values.
