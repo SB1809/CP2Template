@@ -1,8 +1,9 @@
+//Sophia Babayev / 3/2/2026 / This program calculates the number of prime numbers between 0 and a user specified max value using a user specified number of threads.
+import java.util.Scanner;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Scanner;
-
 public class PrimeThread{
+    
     
     private static int total=0;
     //this provided thread calls functions you will need to run in order to calculate the number of threads between the provided min and max values.
