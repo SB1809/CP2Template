@@ -14,4 +14,3 @@ boolean binarySearch(T[] data, int min, int max, T target){
 }
 
 
-}
