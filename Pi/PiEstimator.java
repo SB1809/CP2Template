@@ -27,6 +27,8 @@ public static void main(String[] args) {
 		calcThread something = new calcThread();
 		something.start();
 		something.running = true;
+		synchronized(something) {
 		something.notify();
+		}
 	}  
 }

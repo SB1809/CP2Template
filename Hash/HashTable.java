@@ -49,7 +49,7 @@ public class HashTable {
 		int originalIndex = index;
 		int firstDeletedIndex = -1; 
 		
-		/
+		
 		while (table[index] != null) {
 			
 			if (!table[index].deleted && table[index].key.equals(key)) {
