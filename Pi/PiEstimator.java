@@ -17,18 +17,44 @@ public class PiEstimator{
 	
 public static void main(String[] args) {  
 	    JFrame f=new JFrame("Button Example");  
-	    JButton b=new JButton("Click Here");  
+	    JButton button=new JButton("Start");  
 	    JLabel example = new JLabel(Double.toString(Math.PI));
-	    f.add(example);
-	    f.add(b);  
-	    f.setSize(300,300);  
-	    f.setLayout(new GridLayout(4, 1));  
-	    f.setVisible(true);    
 		calcThread something = new calcThread();
 		something.start();
-		something.running = true;
-		synchronized(something) {
-		something.notify();
+		JLabel mine = new JLabel("Estimae: ");
+		JLabel trial = new JLabel("Trials: ");
+	    f.add(example);
+	    f.add(mine);
+	    f.add(trial);
+	   
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(button.getText().equals("Start")) {
+					button.setText("Stop");
+					synchronized(something) {
+						something.running = true;
+						something.notify();
+					
+					}
+				}
+				else {
+					something.running = false;
+					button.setText("Start");
+				}
+			}
+		}); 
+		 f.add(button);  
+	    f.setSize(300,300);  
+	    f.setLayout(new GridLayout(4, 1));  
+	    f.setVisible(true);  
+	
+		while(true) {
+	
+				mine.setText("Estimate: "+Double.toString(something.estimate));
+				trial.setText("Trials: "+Double.toString(something.total));
+			
 		}
-	}  
+	  
+}
 }
